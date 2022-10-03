@@ -6,4 +6,5 @@ out/
 target
 basket.txt
 basket.json
-log.csv
+log.csv!/src/main/java/ClientLog.java
+

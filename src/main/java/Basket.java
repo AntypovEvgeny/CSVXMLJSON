@@ -1,7 +1,6 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.stream.Stream;
 
 public class Basket {
 
-    final protected Product[] product;
+    final private Product[] product;
     private int sumProduct = 0;
 
     public Basket(Product[] product) {
@@ -39,17 +38,7 @@ public class Basket {
     public void saveTxt(File textFile) throws FileNotFoundException {
         try (PrintWriter out = new PrintWriter(textFile)) {
             Stream.of(product).forEach(p ->
-                    out.printf(p.getName() + " " + p.getPrice() + " " + p.getInBasket() + " "));
-        }
-    }
-
-    public void saveJson(File textFile) {
-        try (FileWriter writer = new FileWriter(textFile)) {
-            GsonBuilder builder = new GsonBuilder();
-            Gson gson = builder.setPrettyPrinting().create();
-            writer.write(gson.toJson(this, Basket.class));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                    out.printf(p.getName(), p.getPrice(), p.getInBasket()));
         }
     }
 
@@ -70,11 +59,4 @@ public class Basket {
             return new Basket(product.toArray(Product[]::new));
         }
     }
-
-    public static Basket loadFromJson(File textFile) throws FileNotFoundException {
-        Gson gson = new Gson();
-        FileReader reader = new FileReader(textFile);
-        return gson.fromJson(reader, Basket.class);
-    }
 }
-
